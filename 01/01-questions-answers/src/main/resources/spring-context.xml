@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="questionProducerService" class="com.ovgusev.service.QuestionProducerServiceImpl">
+        <constructor-arg name="filePath" value="questions-answers.csv"/>
+    </bean>
+
+    <bean id="resultService" class="com.ovgusev.service.ResultServiceImpl"/>
+
+    <bean id="askingService" class="com.ovgusev.service.AskingServiceImpl">
+        <constructor-arg name="questionProducerService" ref="questionProducerService"/>
+        <constructor-arg name="resultService" ref="resultService"/>
+    </bean>
+</beans>
