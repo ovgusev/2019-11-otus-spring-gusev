@@ -11,6 +11,7 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>01/01-student-testing</module>
+        <module>01/01-questions-answers</module>
+        <module>02/02-questions-answers</module>
     </modules>
 </project>
