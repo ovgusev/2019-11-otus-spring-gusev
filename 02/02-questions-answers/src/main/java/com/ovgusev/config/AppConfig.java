@@ -1,4 +1,4 @@
-package com.ovgusev;
+package com.ovgusev.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;

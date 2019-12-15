@@ -1,6 +1,6 @@
 package com.ovgusev.service;
 
-public interface StudentIOService {
+public interface CommandLineIOService {
     String readLine();
 
     void printLine(String line);

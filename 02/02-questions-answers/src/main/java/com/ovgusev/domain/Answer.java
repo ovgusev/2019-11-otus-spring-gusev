@@ -3,9 +3,9 @@ package com.ovgusev.domain;
 public class Answer {
     private Question question;
     private String answer;
-    private Boolean correct;
+    private boolean correct;
 
-    public Answer(Question question, String answer, Boolean correct) {
+    public Answer(Question question, String answer, boolean correct) {
         this.question = question;
         this.answer = answer;
         this.correct = correct;
@@ -19,7 +19,7 @@ public class Answer {
         return answer;
     }
 
-    public Boolean isCorrect() {
+    public boolean isCorrect() {
         return correct;
     }
 }
