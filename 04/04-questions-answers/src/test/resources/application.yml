@@ -1,3 +1,2 @@
-file:
-  basename: /QA-test
+filebasename: /QA-test
 language: en

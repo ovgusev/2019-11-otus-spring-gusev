@@ -2,6 +2,7 @@ package com.ovgusev.service.impl;
 
 import com.ovgusev.config.LocaleConfig;
 import com.ovgusev.domain.Question;
+import com.ovgusev.exceptions.AppException;
 import com.ovgusev.service.QuestionProducerService;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
@@ -44,7 +45,7 @@ public class QuestionProducerServiceImpl implements QuestionProducerService {
                 );
             });
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new AppException("Error while reading file", e);
         }
 
         return questions;
