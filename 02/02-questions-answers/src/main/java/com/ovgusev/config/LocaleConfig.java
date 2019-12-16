@@ -1,44 +1,54 @@
 package com.ovgusev.config;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
 import java.util.Locale;
 import java.util.Optional;
 
-@Configuration
+@Component
 public class LocaleConfig {
-    @Value("${user.language}")
-    private String defaultLanguage;
+    private final String defaultLanguage;
 
-    @Value("${user.country}")
-    private String defaultCountry;
+    private final String defaultCountry;
 
-    @Value("${language:#{null}}")
-    private Optional<String> language;
+    private final String language;
 
-    @Value("${country:#{null}}")
-    private Optional<String> country;
+    private final String country;
 
-    @Value("${file.basename}")
-    private String fileBasename;
+    private final String fileBasename;
 
-    public LocaleConfig() {
-    }
+    private final Locale locale;
 
-    public LocaleConfig(String defaultLanguage, String defaultCountry, Optional<String> language, Optional<String> country, String fileBasename) {
+    private final String CSVFileName;
+
+    public LocaleConfig(@Value("${user.language}") String defaultLanguage,
+                        @Value("${user.country}") String defaultCountry,
+                        @Value("${language:#{null}}") String language,
+                        @Value("${country:#{null}}") String country,
+                        @Value("${file.basename}") String fileBasename) {
         this.defaultLanguage = defaultLanguage;
         this.defaultCountry = defaultCountry;
         this.language = language;
         this.country = country;
         this.fileBasename = fileBasename;
+        this.locale = calcLocale();
+        this.CSVFileName = calcCSVFileName();
     }
 
     public Locale getLocale() {
-        return new Locale(language.orElse(defaultLanguage), country.orElse(defaultCountry));
+        return locale;
     }
 
     public String getCSVFileName() {
+        return CSVFileName;
+    }
+
+    private Locale calcLocale() {
+        return new Locale(Optional.ofNullable(language).orElse(defaultLanguage), Optional.ofNullable(country).orElse(defaultCountry));
+    }
+
+    private String calcCSVFileName() {
         return fileBasename + "_" + getLocale().getLanguage() + ".csv";
     }
 }

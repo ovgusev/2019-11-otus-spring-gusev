@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.context.MessageSource;
 
 import java.util.Locale;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -35,7 +34,7 @@ class I18nMessageServiceImplTest {
     @Test
     @DisplayName("Should use default Locale correct")
     void shouldUseDefaultLocaleCorrect() {
-        I18nMessageService messageService = new I18nMessageServiceImpl(messageSourceMock, new LocaleConfig(DEFAULT_LANGUAGE, DEFAULT_COUNTRY, Optional.ofNullable(null), Optional.ofNullable(null), null));
+        I18nMessageService messageService = new I18nMessageServiceImpl(messageSourceMock, new LocaleConfig(DEFAULT_LANGUAGE, DEFAULT_COUNTRY, null, null, null));
         assertEquals(new Locale(DEFAULT_LANGUAGE, DEFAULT_COUNTRY).toString(),
                 messageService.getMessage("any"));
     }
@@ -43,7 +42,7 @@ class I18nMessageServiceImplTest {
     @Test
     @DisplayName("Should use Locale correct")
     void shouldUseLocaleCorrect() {
-        I18nMessageService messageService = new I18nMessageServiceImpl(messageSourceMock, new LocaleConfig(DEFAULT_LANGUAGE, DEFAULT_COUNTRY, Optional.of(LANGUAGE), Optional.of(COUNTRY), null));
+        I18nMessageService messageService = new I18nMessageServiceImpl(messageSourceMock, new LocaleConfig(DEFAULT_LANGUAGE, DEFAULT_COUNTRY, LANGUAGE, COUNTRY, null));
         assertEquals(new Locale(LANGUAGE, COUNTRY).toString(),
                 messageService.getMessage("any"));
     }
