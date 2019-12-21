@@ -2,10 +2,11 @@ package com.ovgusev.service.impl;
 
 import com.ovgusev.config.LocaleConfig;
 import com.ovgusev.domain.Question;
-import com.ovgusev.exceptions.AppException;
+import com.ovgusev.exceptions.IOAppException;
 import com.ovgusev.service.QuestionProducerService;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +32,7 @@ public class QuestionProducerServiceImpl implements QuestionProducerService {
         List<Question> questions = new ArrayList<>();
         InputStream questionsInputStream;
         CSVParser csvParser;
-        String filePath = localeConfig.getCSVFileName();
+        String filePath = getCSVFileName();
 
         try {
             questionsInputStream = resourceLoader.getResource(filePath).getInputStream();
@@ -45,9 +46,13 @@ public class QuestionProducerServiceImpl implements QuestionProducerService {
                 );
             });
         } catch (IOException e) {
-            throw new AppException("Error while reading file", e);
+            throw new IOAppException("Error while reading file", e);
         }
 
         return questions;
+    }
+
+    private String getCSVFileName() {
+        return localeConfig.getFileBasename() + "_" + LocaleContextHolder.getLocale().getLanguage() + ".csv";
     }
 }
