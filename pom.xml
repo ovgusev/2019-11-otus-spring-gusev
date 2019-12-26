@@ -13,5 +13,6 @@
     <modules>
         <module>01/01-questions-answers</module>
         <module>02/02-questions-answers</module>
+        <module>04/04-questions-answers</module>
     </modules>
 </project>
