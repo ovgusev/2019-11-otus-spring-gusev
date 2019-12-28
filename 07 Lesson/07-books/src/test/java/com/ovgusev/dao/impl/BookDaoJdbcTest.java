@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Import;
 import java.util.List;
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -36,7 +37,7 @@ class BookDaoJdbcTest {
     @Test
     @DisplayName("Поиск существующей записи по id")
     void shouldFindByIdCorrect() {
-        assertEquals(FIRST_ROW, dao.findById(FIRST_ROW.getId()).get());
+        assertEquals(FIRST_ROW, dao.findById(FIRST_ROW.getId()).orElse(null));
     }
 
     @Test
@@ -48,7 +49,7 @@ class BookDaoJdbcTest {
     @Test
     @DisplayName("Поиск существующей записи по name")
     void shouldFindByNameCorrect() {
-        assertEquals(FIRST_ROW, dao.findByName(FIRST_ROW.getName()).get());
+        assertEquals(FIRST_ROW, dao.findByName(FIRST_ROW.getName()).orElse(null));
     }
 
     @Test
@@ -60,19 +61,18 @@ class BookDaoJdbcTest {
     @Test
     @DisplayName("Модификация поля name")
     void shouldUpdateCorrect() {
-        assertEquals(NOT_EXISTING_NAME, dao.update(
+        assertThat(dao.update(
                 Book.of(NOT_EXISTING_NAME, FIRST_ROW.getAuthor(), FIRST_ROW.getGenre()).setId(FIRST_ROW.getId()))
-                .get().getName()
-        );
+        ).isNotEmpty().get().hasFieldOrPropertyWithValue("name", NOT_EXISTING_NAME);
 
-        assertEquals(NOT_EXISTING_NAME, dao.findById(FIRST_ROW.getId()).get().getName());
+        assertEquals(NOT_EXISTING_NAME, dao.findById(FIRST_ROW.getId()).map(Book::getName).orElse(null));
     }
 
     @Test
     @DisplayName("Удаление записи")
     void delete() {
-        assertEquals(FIRST_ROW, dao.delete(FIRST_ROW.getId()).get());
-        assertEquals(Optional.empty(), dao.delete(FIRST_ROW.getId()));
+        assertEquals(FIRST_ROW, dao.delete(FIRST_ROW.getId()).orElse(null));
+        assertThat(dao.delete(FIRST_ROW.getId())).isEmpty();
     }
 
     @Test

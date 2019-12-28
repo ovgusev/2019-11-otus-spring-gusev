@@ -32,7 +32,7 @@ class GenreDaoJdbcTest {
     @Test
     @DisplayName("Поиск существующей записи по id")
     void shouldFindByIdCorrect() {
-        assertEquals(FIRST_ROW, dao.findById(FIRST_ROW.getId()).get());
+        assertEquals(FIRST_ROW, dao.findById(FIRST_ROW.getId()).orElse(null));
     }
 
     @Test
@@ -44,7 +44,7 @@ class GenreDaoJdbcTest {
     @Test
     @DisplayName("Поиск существующей записи по name")
     void shouldFindByNameCorrect() {
-        assertEquals(FIRST_ROW, dao.findByName(FIRST_ROW.getName()).get());
+        assertEquals(FIRST_ROW, dao.findByName(FIRST_ROW.getName()).orElse(null));
     }
 
     @Test

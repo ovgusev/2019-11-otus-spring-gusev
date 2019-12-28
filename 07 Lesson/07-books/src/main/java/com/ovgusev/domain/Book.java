@@ -10,22 +10,18 @@ import lombok.experimental.Accessors;
 @NoArgsConstructor
 @Accessors(chain = true)
 public class Book {
-    long id;
+    private long id;
 
-    String name;
+    private String name;
 
-    Author author;
+    private Author author;
 
-    Genre genre;
+    private Genre genre;
 
     public static Book of(String name, Author author, Genre genre) {
         return new Book()
                 .setName(name)
                 .setAuthor(author)
                 .setGenre(genre);
-    }
-
-    public String getShortInfo() {
-        return name + " by " + author.getName();
     }
 }
