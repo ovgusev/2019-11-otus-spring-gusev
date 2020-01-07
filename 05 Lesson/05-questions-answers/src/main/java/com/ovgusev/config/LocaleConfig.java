@@ -5,6 +5,7 @@ import org.springframework.boot.context.properties.ConstructorBinding;
 import org.springframework.context.i18n.LocaleContextHolder;
 
 import java.util.Locale;
+import java.util.Optional;
 
 @ConfigurationProperties
 public class LocaleConfig {
@@ -27,10 +28,10 @@ public class LocaleConfig {
     }
 
     private void calcLocale() {
-        if (language != null && country != null) {
-            Locale locale = new Locale(language, country);
-            LocaleContextHolder.setDefaultLocale(locale);
-            LocaleContextHolder.setLocale(locale);
-        }
+        Locale locale = new Locale(
+                Optional.ofNullable(language).orElseGet(() -> Locale.getDefault().getLanguage()),
+                Optional.ofNullable(country).orElseGet(() -> Locale.getDefault().getCountry()));
+
+        LocaleContextHolder.setLocale(locale);
     }
 }

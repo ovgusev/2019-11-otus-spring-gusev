@@ -5,15 +5,20 @@ import com.ovgusev.domain.Answer;
 import com.ovgusev.service.AskingService;
 import com.ovgusev.service.I18nMessageService;
 import com.ovgusev.service.ResultService;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import org.springframework.shell.Availability;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
+import org.springframework.shell.standard.ShellMethodAvailability;
 import org.springframework.shell.standard.ShellOption;
 
 import java.util.List;
 
 @ShellComponent
 @RequiredArgsConstructor
+@Setter(AccessLevel.PRIVATE)
 public class ExamCommands {
     private final AskingService askingService;
     private final ResultService resultService;
@@ -23,13 +28,10 @@ public class ExamCommands {
     private List<Answer> lastResult;
 
     @ShellMethod(value = "Start exam", key = {"exam", "start", "start-exam"})
+    @ShellMethodAvailability("userLoggedIn")
     public String startExam() {
-        if (userName == null) {
-            return askLogin();
-        } else {
-            setLastResult(askingService.askQuestions());
-            return printResults();
-        }
+        setLastResult(askingService.askQuestions());
+        return printResults();
     }
 
     @ShellMethod(value = "Login", key = {"login", "user"})
@@ -43,12 +45,17 @@ public class ExamCommands {
     }
 
     @ShellMethod(value = "Print last results", key = {"hist", "result"})
+    @ShellMethodAvailability("examPassed")
     public String printLastResults() {
-        if (lastResult != null) {
-            return printResults();
-        } else {
-            return null;
-        }
+        return printResults();
+    }
+
+    public Availability userLoggedIn() {
+        return userName != null ? Availability.available() : Availability.unavailable(askLogin());
+    }
+
+    public Availability examPassed() {
+        return lastResult != null ? Availability.available() : Availability.unavailable(messageService.getMessage(MessagesConsts.RESULT_EMPTY));
     }
 
     private String askLogin() {
@@ -57,13 +64,5 @@ public class ExamCommands {
 
     private String printResults() {
         return resultService.printResults(userName, lastResult);
-    }
-
-    private synchronized void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    private synchronized void setLastResult(List<Answer> lastResult) {
-        this.lastResult = lastResult;
     }
 }

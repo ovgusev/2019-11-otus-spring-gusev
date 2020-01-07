@@ -1,5 +1,4 @@
 filebasename: /QA-test
-language: en
 spring:
   shell:
     interactive:
