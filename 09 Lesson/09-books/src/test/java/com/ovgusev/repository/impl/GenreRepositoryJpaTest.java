@@ -1,8 +1,7 @@
-package com.ovgusev.dao.impl;
+package com.ovgusev.repository.impl;
 
-import com.ovgusev.domain.Author;
-import com.ovgusev.repository.AuthorRepository;
-import com.ovgusev.repository.impl.AuthorRepositoryJpa;
+import com.ovgusev.domain.Genre;
+import com.ovgusev.repository.GenreRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,15 +13,15 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DataJpaTest
-@Import(AuthorRepositoryJpa.class)
-@DisplayName("Testing methods of class AuthorRepositoryJpa")
-class AuthorRepositoryJpaTest {
+@Import(GenreRepositoryJpa.class)
+@DisplayName("Testing methods of class GenreRepositoryJpa")
+class GenreRepositoryJpaTest {
     private static final long NOT_EXISTING_ID = -1L;
     private static final String NOT_EXISTING_NAME = "NOT_EXISTING_NAME";
-    private static final Author FIRST_ROW = new Author(1, "AUTHOR1");
+    private static final Genre FIRST_ROW = new Genre(1, "GENRE1");
 
     @Autowired
-    AuthorRepository repository;
+    GenreRepository repository;
 
     @Test
     @DisplayName("Поиск несуществующей записи по id")
@@ -51,6 +50,6 @@ class AuthorRepositoryJpaTest {
     @Test
     @DisplayName("Вставка новой записи")
     void shouldInsertCorrect() {
-        assertEquals(NOT_EXISTING_NAME, repository.insert(Author.of(NOT_EXISTING_NAME)).getName());
+        assertEquals(NOT_EXISTING_NAME, repository.save(Genre.of(NOT_EXISTING_NAME)).getName());
     }
 }

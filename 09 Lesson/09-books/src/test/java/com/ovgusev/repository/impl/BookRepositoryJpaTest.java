@@ -1,10 +1,7 @@
-package com.ovgusev.dao.impl;
+package com.ovgusev.repository.impl;
 
 import com.ovgusev.domain.Book;
 import com.ovgusev.repository.BookRepository;
-import com.ovgusev.repository.impl.AuthorRepositoryJpa;
-import com.ovgusev.repository.impl.BookRepositoryJpa;
-import com.ovgusev.repository.impl.GenreRepositoryJpa;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DataJpaTest
-@Import({BookRepositoryJpa.class, AuthorRepositoryJpa.class, GenreRepositoryJpa.class})
+@Import({BookRepositoryJpa.class})
 @DisplayName("Testing methods of class BookRepositoryJpa")
 class BookRepositoryJpaTest {
     @Autowired
@@ -66,23 +63,23 @@ class BookRepositoryJpaTest {
     @Test
     @DisplayName("Вставка новой записи")
     void shouldInsertCorrect() {
-        assertEquals(NOT_EXISTING_NAME, repository.insert(Book.of(NOT_EXISTING_NAME, firstRow.getAuthor(), firstRow.getGenre())).getName());
+        assertEquals(NOT_EXISTING_NAME, repository.save(Book.of(NOT_EXISTING_NAME, firstRow.getAuthor(), firstRow.getGenre())).getName());
     }
 
     @Test
     @DisplayName("Модификация поля name")
     void shouldUpdateCorrect() {
-        assertThat(repository.update(firstRow.setName(NOT_EXISTING_NAME)))
-                .isNotEmpty().get().hasFieldOrPropertyWithValue("name", NOT_EXISTING_NAME);
+        assertThat(repository.save(firstRow.setName(NOT_EXISTING_NAME)))
+                .hasFieldOrPropertyWithValue("name", NOT_EXISTING_NAME);
 
         assertEquals(NOT_EXISTING_NAME, repository.findById(firstRow.getId()).map(Book::getName).orElse(null));
     }
 
     @Test
     @DisplayName("Удаление записи")
-    void delete() {
-        assertEquals(firstRow, repository.delete(firstRow.getId()).orElse(null));
-        assertThat(repository.delete(firstRow.getId())).isEmpty();
+    void shouldDeleteCorrect() {
+        assertEquals(firstRow, repository.remove(firstRow).orElse(null));
+        assertThat(repository.remove(firstRow)).isEmpty();
     }
 
     @Test

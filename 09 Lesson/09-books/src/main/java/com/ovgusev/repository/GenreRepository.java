@@ -9,5 +9,5 @@ public interface GenreRepository {
 
     Optional<Genre> findByName(String name);
 
-    Genre insert(Genre genre);
+    Genre save(Genre genre);
 }

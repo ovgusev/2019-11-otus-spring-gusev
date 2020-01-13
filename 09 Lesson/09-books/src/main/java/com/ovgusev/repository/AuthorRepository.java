@@ -9,5 +9,5 @@ public interface AuthorRepository {
 
     Optional<Author> findByName(String name);
 
-    Author insert(Author author);
+    Author save(Author author);
 }

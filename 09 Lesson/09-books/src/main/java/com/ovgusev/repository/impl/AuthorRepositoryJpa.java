@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
+import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 import java.util.Optional;
@@ -15,6 +16,7 @@ import java.util.Optional;
 @Transactional
 @RequiredArgsConstructor
 public class AuthorRepositoryJpa implements AuthorRepository {
+    @PersistenceContext
     private final EntityManager entityManager;
 
     @Override
@@ -36,8 +38,8 @@ public class AuthorRepositoryJpa implements AuthorRepository {
     }
 
     @Override
-    public Author insert(Author author) {
-        if (entityManager.contains(author)) {
+    public Author save(Author author) {
+        if (author.getId() > 0) {
             return entityManager.merge(author);
         } else {
             entityManager.persist(author);

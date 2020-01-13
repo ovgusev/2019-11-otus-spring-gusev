@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
+import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 import java.util.Optional;
@@ -15,6 +16,7 @@ import java.util.Optional;
 @Transactional
 @RequiredArgsConstructor
 public class GenreRepositoryJpa implements GenreRepository {
+    @PersistenceContext
     private final EntityManager entityManager;
 
     @Override
@@ -36,8 +38,8 @@ public class GenreRepositoryJpa implements GenreRepository {
     }
 
     @Override
-    public Genre insert(Genre genre) {
-        if (entityManager.contains(genre)) {
+    public Genre save(Genre genre) {
+        if (genre.getId() > 0) {
             return entityManager.merge(genre);
         } else {
             entityManager.persist(genre);

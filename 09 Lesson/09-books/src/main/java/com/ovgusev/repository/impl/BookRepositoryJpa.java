@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
+import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 import java.util.List;
@@ -16,11 +17,12 @@ import java.util.Optional;
 @Transactional
 @RequiredArgsConstructor
 public class BookRepositoryJpa implements BookRepository {
+    @PersistenceContext
     private final EntityManager entityManager;
 
     @Override
-    public Book insert(Book book) {
-        if (entityManager.contains(book)) {
+    public Book save(Book book) {
+        if (book.getId() > 0) {
             return entityManager.merge(book);
         } else {
             entityManager.persist(book);
@@ -29,21 +31,13 @@ public class BookRepositoryJpa implements BookRepository {
     }
 
     @Override
-    public Optional<Book> update(Book book) {
-        if (entityManager.contains(book)) {
-            return Optional.of(entityManager.merge(book));
-        } else {
-            return Optional.empty();
-        }
-    }
-
-    @Override
-    public Optional<Book> delete(long id) {
-        Optional<Book> bookById = findById(id);
-
-        bookById.ifPresent(entityManager::remove);
-
-        return bookById;
+    public Optional<Book> remove(Book book) {
+        return Optional.ofNullable(book)
+                .map(b -> entityManager.contains(b) ? b : findById(b.getId()).orElse(null))
+                .map(b -> {
+                    entityManager.remove(b);
+                    return b;
+                });
     }
 
     @Override
@@ -53,7 +47,7 @@ public class BookRepositoryJpa implements BookRepository {
 
     @Override
     public Optional<Book> findByName(String name) {
-        TypedQuery<Book> query = entityManager.createQuery("select b from Book b where name = :name", Book.class);
+        TypedQuery<Book> query = entityManager.createQuery("select b from Book b join fetch b.author join fetch b.genre where b.name = :name", Book.class);
 
         query.setParameter("name", name);
 
@@ -66,7 +60,7 @@ public class BookRepositoryJpa implements BookRepository {
 
     @Override
     public List<Book> getAll() {
-        TypedQuery<Book> query = entityManager.createQuery("select b from Book b", Book.class);
+        TypedQuery<Book> query = entityManager.createQuery("select b from Book b join fetch b.author join fetch b.genre", Book.class);
         return query.getResultList();
     }
 }
