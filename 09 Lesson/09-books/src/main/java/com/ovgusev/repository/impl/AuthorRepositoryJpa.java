@@ -13,7 +13,7 @@ import javax.transaction.Transactional;
 import java.util.Optional;
 
 @Repository
-@Transactional
+@Transactional(value = Transactional.TxType.MANDATORY)
 @RequiredArgsConstructor
 public class AuthorRepositoryJpa implements AuthorRepository {
     @PersistenceContext

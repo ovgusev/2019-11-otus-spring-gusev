@@ -4,17 +4,19 @@ import com.ovgusev.domain.Book;
 import com.ovgusev.domain.Comment;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
-import java.util.function.Function;
 
 public interface BookMethodTextService {
-    String insertBook(Book bookToInsert, Function<Book, Book> insertingFunction);
+    String getBookListText(List<Book> bookList);
 
-    String updateBook(Book bookToUpdate, Function<Book, Book> updatingFunction);
+    String saveBookText(Book book);
 
-    String deleteBook(Book bookToDelete, Function<Book, Optional<Book>> deletingFunction);
+    String removeBookText(String bookName, Optional<Book> book);
 
-    String getBookListInfo(List<Book> bookList);
+    String getCommentListText(List<Comment> commentList);
 
-    String insertBookComment(Book book, Comment comment);
+    String addCommentText(String bookName, Optional<Map.Entry<Book, Comment>> bookCommentEntry);
+
+    String removeCommentText(long commentId, Optional<Comment> comment);
 }

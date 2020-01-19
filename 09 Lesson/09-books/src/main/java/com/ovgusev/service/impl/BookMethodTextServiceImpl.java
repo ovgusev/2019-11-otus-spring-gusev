@@ -10,34 +10,34 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
 public class BookMethodTextServiceImpl implements BookMethodTextService {
-    public static String CRLF = System.getProperty("line.separator");
+    private static String CRLF = System.getProperty("line.separator");
 
     @Override
-    public String insertBook(Book bookToInsert, Function<Book, Book> insertingFunction) {
-        insertingFunction.apply(bookToInsert);
-        return "Inserted book " + getShortInfo(bookToInsert);
+    public String saveBookText(Book book) {
+        return "Modified book: " + getShortInfo(book);
     }
 
     @Override
-    public String updateBook(Book bookToUpdate, Function<Book, Book> updatingFunction) {
-        updatingFunction.apply(bookToUpdate);
-        return "Updated book to: " + getShortInfo(bookToUpdate);
+    public String removeBookText(String bookName, Optional<Book> book) {
+        return book
+                .map(b -> "Removed book " + getShortInfo(b))
+                .orElseGet(() -> bookNotFoundText(bookName));
     }
 
     @Override
-    public String deleteBook(Book bookToDelete, Function<Book, Optional<Book>> deletingFunction) {
-        return deletingFunction.apply(bookToDelete)
-                .map(deletedBook -> "Deleted book " + getShortInfo(deletedBook))
-                .orElse("Unexpected error while deleting " + getShortInfo(bookToDelete));
+    public String getCommentListText(List<Comment> commentList) {
+        return commentList
+                .stream()
+                .map(Comment::toString)
+                .collect(Collectors.joining(CRLF));
     }
 
     @Override
-    public String getBookListInfo(List<Book> bookList) {
+    public String getBookListText(List<Book> bookList) {
         Map<Genre, List<Book>> booksGroupedByGenres = bookList.stream().collect(Collectors.groupingBy(Book::getGenre));
         return booksGroupedByGenres.entrySet().stream()
                 .sorted(Comparator.comparing(e -> e.getKey().getName()))
@@ -50,8 +50,17 @@ public class BookMethodTextServiceImpl implements BookMethodTextService {
     }
 
     @Override
-    public String insertBookComment(Book book, Comment comment) {
-        return "Added comment for book " + getShortInfo(book) + System.getProperty("line.separator") + comment.getText();
+    public String addCommentText(String bookName, Optional<Map.Entry<Book, Comment>> bookCommentEntry) {
+        return bookCommentEntry
+                .map(e -> "Added comment for book " + getShortInfo(e.getKey()) + CRLF + e.getValue().getText())
+                .orElseGet(() -> bookNotFoundText(bookName));
+    }
+
+    @Override
+    public String removeCommentText(long commentId, Optional<Comment> comment) {
+        return comment
+                .map(c -> "Removed comment " + c.toString())
+                .orElseGet(() -> "Comment " + commentId + " not found");
     }
 
     private String getShortInfo(Book book) {
@@ -60,5 +69,9 @@ public class BookMethodTextServiceImpl implements BookMethodTextService {
 
     private String tabString(String s) {
         return "\t" + s;
+    }
+
+    private static String bookNotFoundText(String bookName) {
+        return "Book " + bookName + " not found";
     }
 }

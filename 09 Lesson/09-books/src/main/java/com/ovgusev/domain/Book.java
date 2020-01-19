@@ -21,11 +21,11 @@ public class Book {
     @Column(name = "name", unique = true, nullable = false)
     private String name;
 
-    @OneToOne(targetEntity = Author.class, cascade = CascadeType.ALL)
+    @ManyToOne(targetEntity = Author.class, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "author_id", nullable = false)
     private Author author;
 
-    @OneToOne(targetEntity = Genre.class, cascade = CascadeType.ALL)
+    @ManyToOne(targetEntity = Genre.class, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "genre_id", nullable = false)
     private Genre genre;
 
