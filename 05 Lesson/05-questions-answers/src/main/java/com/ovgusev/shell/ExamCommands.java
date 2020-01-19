@@ -5,9 +5,7 @@ import com.ovgusev.domain.Answer;
 import com.ovgusev.service.AskingService;
 import com.ovgusev.service.I18nMessageService;
 import com.ovgusev.service.ResultService;
-import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import org.springframework.shell.Availability;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
@@ -18,7 +16,6 @@ import java.util.List;
 
 @ShellComponent
 @RequiredArgsConstructor
-@Setter(AccessLevel.PRIVATE)
 public class ExamCommands {
     private final AskingService askingService;
     private final ResultService resultService;
@@ -30,7 +27,7 @@ public class ExamCommands {
     @ShellMethod(value = "Start exam", key = {"exam", "start", "start-exam"})
     @ShellMethodAvailability("userLoggedIn")
     public String startExam() {
-        setLastResult(askingService.askQuestions());
+        this.lastResult = askingService.askQuestions();
         return printResults();
     }
 
@@ -39,7 +36,7 @@ public class ExamCommands {
         if (userName.isEmpty()) {
             return askLogin();
         } else {
-            setUserName(userName);
+            this.userName = userName;
             return messageService.getMessage(MessagesConsts.GREETINGS_PROPERTY, userName);
         }
     }
