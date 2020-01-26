@@ -1,0 +1,9 @@
+filebasename: /QA-test
+spring:
+  shell:
+    interactive:
+      enabled: false
+    script:
+      spring:
+        shell:
+          script: false
