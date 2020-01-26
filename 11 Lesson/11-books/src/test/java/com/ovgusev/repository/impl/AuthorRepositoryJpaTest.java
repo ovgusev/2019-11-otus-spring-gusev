@@ -6,14 +6,12 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.context.annotation.Import;
 
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DataJpaTest
-@Import(AuthorRepositoryJpa.class)
 @DisplayName("Testing methods of class AuthorRepositoryJpa")
 class AuthorRepositoryJpaTest {
     private static final long NOT_EXISTING_ID = -1L;

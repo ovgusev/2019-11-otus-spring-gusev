@@ -13,6 +13,7 @@ import javax.persistence.*;
 @Accessors(chain = true)
 @Entity
 @Table(name = "books")
+@NamedEntityGraph(name = "Book.allAttributes", includeAllAttributes = true)
 public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

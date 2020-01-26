@@ -1,13 +1,10 @@
 package com.ovgusev.repository;
 
 import com.ovgusev.domain.Author;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface AuthorRepository {
-    Optional<Author> findById(long id);
-
+public interface AuthorRepository extends JpaRepository<Author, Long> {
     Optional<Author> findByName(String name);
-
-    Author save(Author author);
 }

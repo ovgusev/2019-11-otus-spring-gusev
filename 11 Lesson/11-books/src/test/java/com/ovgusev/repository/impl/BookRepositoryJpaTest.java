@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.context.annotation.Import;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,7 +17,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DataJpaTest
-@Import({BookRepositoryJpa.class})
 @DisplayName("Testing methods of class BookRepositoryJpa")
 class BookRepositoryJpaTest {
     @Autowired
@@ -78,14 +76,15 @@ class BookRepositoryJpaTest {
     @Test
     @DisplayName("Удаление записи")
     void shouldDeleteCorrect() {
-        assertEquals(firstRow, repository.remove(firstRow).orElse(null));
-        assertThat(repository.remove(firstRow)).isEmpty();
+        assertThat(firstRow).isEqualTo(repository.findById(firstRow.getId()).orElseGet(null));
+        repository.delete(firstRow);
+        assertThat(repository.findById(firstRow.getId())).isEmpty();
     }
 
     @Test
     @DisplayName("Проверка получения всех записей")
-    void shouldGetAll() {
-        List<Book> all = repository.getAll();
+    void shouldFindAll() {
+        List<Book> all = repository.findAll();
 
         assertEquals(1, all.size());
         assertTrue(all.contains(firstRow));

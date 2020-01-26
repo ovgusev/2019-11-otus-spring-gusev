@@ -29,7 +29,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<Book> getBookList() {
-        return bookRepository.getAll();
+        return bookRepository.findAll();
     }
 
     @Override
@@ -45,9 +45,9 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Optional<Book> remove(String bookName) {
-        return bookRepository.findByName(bookName)
-                .map(bookRepository::remove)
-                .flatMap(book -> book);
+        Optional<Book> book = bookRepository.findByName(bookName);
+        book.ifPresent(bookRepository::delete);
+        return book;
     }
 
     @Override
@@ -67,8 +67,8 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Optional<Comment> removeComment(long commentId) {
-        return commentRepository.findById(commentId)
-                .map(commentRepository::remove)
-                .flatMap(comment -> comment);
+        Optional<Comment> comment = commentRepository.findById(commentId);
+        comment.ifPresent(commentRepository::delete);
+        return comment;
     }
 }

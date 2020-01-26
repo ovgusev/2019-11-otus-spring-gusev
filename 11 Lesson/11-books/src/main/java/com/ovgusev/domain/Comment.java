@@ -16,6 +16,18 @@ import java.time.LocalDateTime;
 @ToString
 @Entity
 @Table(name = "comments")
+@NamedEntityGraph(
+        name = "Comment.book",
+        attributeNodes = {
+                @NamedAttributeNode(value = "book", subgraph = "Book.authorGenre")
+        },
+        subgraphs = {
+                @NamedSubgraph(name = "Book.authorGenre", attributeNodes = {
+                        @NamedAttributeNode("author"),
+                        @NamedAttributeNode("genre")
+                })
+        }
+)
 public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

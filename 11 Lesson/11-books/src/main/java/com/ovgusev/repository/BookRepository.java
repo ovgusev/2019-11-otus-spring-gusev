@@ -1,18 +1,19 @@
 package com.ovgusev.repository;
 
 import com.ovgusev.domain.Book;
+import org.springframework.data.jpa.repository.EntityGraph;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface BookRepository {
-    Book save(Book book);
+public interface BookRepository extends JpaRepository<Book, Long> {
+    @EntityGraph(value = "Book.allAttributes")
+    List<Book> findAll();
 
-    Optional<Book> remove(Book book);
+    @EntityGraph(value = "Book.allAttributes")
+    Optional<Book> findById(Long id);
 
-    Optional<Book> findById(long id);
-
+    @EntityGraph(value = "Book.allAttributes")
     Optional<Book> findByName(String name);
-
-    List<Book> getAll();
 }
