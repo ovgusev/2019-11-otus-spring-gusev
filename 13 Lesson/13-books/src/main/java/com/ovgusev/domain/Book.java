@@ -4,31 +4,25 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Accessors(chain = true)
-@Entity
-@Table(name = "books")
-@NamedEntityGraph(name = "Book.allAttributes", includeAllAttributes = true)
+@Document(collection = "books")
 public class Book {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private String id;
 
-    @Column(name = "name", unique = true, nullable = false)
     private String name;
 
-    @ManyToOne(targetEntity = Author.class, cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "author_id", nullable = false)
-    private Author author;
+    private String author;
 
-    @ManyToOne(targetEntity = Genre.class, cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "genre_id", nullable = false)
-    private Genre genre;
+    private String genre;
 
-    public static Book of(String name, Author author, Genre genre) {
+    public static Book of(String name, String author, String genre) {
         return new Book()
                 .setName(name)
                 .setAuthor(author)

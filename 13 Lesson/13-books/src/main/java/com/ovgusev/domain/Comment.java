@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.Accessors;
+import org.springframework.data.annotation.Id;
 
 import java.time.LocalDateTime;
 
@@ -13,33 +14,15 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Accessors(chain = true)
 @ToString
-@Entity
-@Table(name = "comments")
-@NamedEntityGraph(
-        name = "Comment.book",
-        attributeNodes = {
-                @NamedAttributeNode(value = "book", subgraph = "Book.authorGenre")
-        },
-        subgraphs = {
-                @NamedSubgraph(name = "Book.authorGenre", attributeNodes = {
-                        @NamedAttributeNode("author"),
-                        @NamedAttributeNode("genre")
-                })
-        }
-)
+//@Table(name = "comments")
 public class Comment {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @ManyToOne(targetEntity = Book.class)
-    @JoinColumn(name = "book_id", nullable = false, updatable = false)
     private Book book;
 
-    @Column(name = "text", nullable = false, updatable = false)
     private String text;
 
-    @Column(name = "insert_date", nullable = false, updatable = false)
     private LocalDateTime insertDate;
 
     public static Comment of(Book book, String text) {

@@ -1,31 +1,22 @@
 package com.ovgusev.service.impl;
 
-import com.ovgusev.domain.Author;
 import com.ovgusev.domain.Book;
 import com.ovgusev.domain.Comment;
-import com.ovgusev.domain.Genre;
-import com.ovgusev.repository.AuthorRepository;
 import com.ovgusev.repository.BookRepository;
-import com.ovgusev.repository.CommentRepository;
-import com.ovgusev.repository.GenreRepository;
 import com.ovgusev.service.BookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
-import java.util.AbstractMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 @Service
-@Transactional
+//@Transactional
 @RequiredArgsConstructor
 public class BookServiceImpl implements BookService {
-    private final AuthorRepository authorRepository;
-    private final GenreRepository genreRepository;
     private final BookRepository bookRepository;
-    private final CommentRepository commentRepository;
+//    private final CommentRepository commentRepository;
 
     @Override
     public List<Book> getBookList() {
@@ -33,10 +24,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Book save(String bookName, String authorName, String genreName) {
-        Author author = authorRepository.findByName(authorName).orElseGet(() -> Author.of(authorName));
-        Genre genre = genreRepository.findByName(genreName).orElseGet(() -> Genre.of(genreName));
-
+    public Book save(String bookName, String author, String genre) {
         return bookRepository.findByName(bookName)
                 .map(bookToUpdate -> bookToUpdate.setAuthor(author).setGenre(genre))
                 .map(bookRepository::save)
@@ -52,23 +40,26 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<Comment> getCommentList(String bookName) {
-        return commentRepository.findByBookName(bookName);
+        return null;
+//        commentRepository.findByBookName(bookName);
     }
 
     @Override
     public Optional<Map.Entry<Book, Comment>> addComment(String bookName, String commentText) {
-        return bookRepository.findByName(bookName)
+        return null;
+/*        return bookRepository.findByName(bookName)
                 .map(book -> {
                     Comment comment = Comment.of(book, commentText);
                     commentRepository.save(comment);
                     return new AbstractMap.SimpleImmutableEntry<>(book, comment);
-                });
+                });*/
     }
 
     @Override
     public Optional<Comment> removeComment(long commentId) {
-        Optional<Comment> comment = commentRepository.findById(commentId);
+        return null;
+/*        Optional<Comment> comment = commentRepository.findById(commentId);
         comment.ifPresent(commentRepository::delete);
-        return comment;
+        return comment;*/
     }
 }

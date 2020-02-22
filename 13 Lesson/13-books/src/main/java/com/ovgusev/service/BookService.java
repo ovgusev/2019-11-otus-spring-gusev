@@ -10,7 +10,7 @@ import java.util.Optional;
 public interface BookService {
     List<Book> getBookList();
 
-    Book save(String bookName, String authorName, String genreName);
+    Book save(String bookName, String author, String genre);
 
     Optional<Book> remove(String bookName);
 

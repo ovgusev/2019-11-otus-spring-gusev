@@ -1,24 +1,11 @@
 package com.ovgusev.repository.impl;
 
-import com.ovgusev.domain.Book;
-import com.ovgusev.domain.Comment;
-import com.ovgusev.repository.CommentRepository;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-
-import javax.persistence.EntityManager;
-import java.util.List;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DataJpaTest
 @DisplayName("Testing methods of class CommentRepositoryJpa")
-class CommentRepositoryJpaTest {
+class CommentRepositoryJpaTest {/*
     @Autowired
     private TestEntityManager em;
 
@@ -75,5 +62,5 @@ class CommentRepositoryJpaTest {
         assertThat(repository.findById(comment.getId())).get().isEqualTo(comment);
         repository.delete(comment);
         assertThat(repository.findById(comment.getId())).isEmpty();
-    }
+    }*/
 }
