@@ -16,11 +16,11 @@ import org.springframework.web.servlet.view.RedirectView;
 @Controller
 @RequiredArgsConstructor
 public class BookController {
-    private static final String BOOK_LIST_URL = "/";
-    private static final String BOOK_EDIT_URL = "/edit";
-    private static final String COMMENT_LIST_URL = "/comment-list";
-    private static final String COMMENT_ADD_URL = "/comment-add";
-    private static final String COMMENT_DELETE_URL = "/comment-delete";
+    public static final String BOOK_LIST_URL = "/";
+    public static final String BOOK_EDIT_URL = "/edit";
+    public static final String COMMENT_LIST_URL = "/comment-list";
+    public static final String COMMENT_ADD_URL = "/comment-add";
+    public static final String COMMENT_DELETE_URL = "/comment-delete";
 
     private final BookService bookService;
 
