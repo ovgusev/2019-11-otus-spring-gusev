@@ -4,19 +4,19 @@ import com.ovgusev.domain.Book;
 import com.ovgusev.domain.Comment;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 public interface BookService {
+    Book findById(long id);
+
     List<Book> getBookList();
 
-    Book save(String bookName, String authorName, String genreName);
+    void edit(long id, String bookName, String authorName, String genreName);
 
-    Optional<Book> remove(String bookName);
+    void remove(long id);
 
-    List<Comment> getCommentList(String bookName);
+    List<Comment> getCommentList(long bookId);
 
-    Optional<Map.Entry<Book, Comment>> addComment(String bookName, String commentText);
+    void addComment(long bookId, String commentText);
 
-    Optional<Comment> removeComment(long commentId);
+    void removeComment(long commentId);
 }

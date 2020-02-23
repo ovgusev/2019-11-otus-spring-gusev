@@ -13,9 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.AbstractMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -28,47 +26,49 @@ public class BookServiceImpl implements BookService {
     private final CommentRepository commentRepository;
 
     @Override
+    public Book findById(long id) {
+        return bookRepository.findById(id).orElseThrow(BookNotFoundException::new);
+    }
+
+    @Override
     public List<Book> getBookList() {
         return bookRepository.findAll();
     }
 
     @Override
-    public Book save(String bookName, String authorName, String genreName) {
+    public void edit(long id, String bookName, String authorName, String genreName) {
         Author author = authorRepository.findByName(authorName).orElseGet(() -> Author.of(authorName));
         Genre genre = genreRepository.findByName(genreName).orElseGet(() -> Genre.of(genreName));
 
-        return bookRepository.findByName(bookName)
-                .map(bookToUpdate -> bookToUpdate.setAuthor(author).setGenre(genre))
-                .map(bookRepository::save)
-                .orElseGet(() -> bookRepository.save(Book.of(bookName, author, genre)));
+        Book book = bookRepository.findById(id).orElseGet(Book::new)
+                .setName(bookName)
+                .setAuthor(author)
+                .setGenre(genre);
+
+        bookRepository.save(book);
     }
 
     @Override
-    public Optional<Book> remove(String bookName) {
-        Optional<Book> book = bookRepository.findByName(bookName);
-        book.ifPresent(bookRepository::delete);
-        return book;
+    public void remove(long id) {
+        bookRepository.deleteById(id);
     }
 
     @Override
-    public List<Comment> getCommentList(String bookName) {
-        return commentRepository.findByBookName(bookName);
+    public List<Comment> getCommentList(long bookId) {
+        return commentRepository.findByBookId(bookId);
     }
 
     @Override
-    public Optional<Map.Entry<Book, Comment>> addComment(String bookName, String commentText) {
-        return bookRepository.findByName(bookName)
-                .map(book -> {
-                    Comment comment = Comment.of(book, commentText);
-                    commentRepository.save(comment);
-                    return new AbstractMap.SimpleImmutableEntry<>(book, comment);
-                });
+    public void addComment(long bookId, String commentText) {
+        Book book = bookRepository.findById(bookId).orElseThrow(BookNotFoundException::new);
+
+        Comment comment = Comment.of(book, commentText);
+        commentRepository.save(comment);
     }
 
     @Override
-    public Optional<Comment> removeComment(long commentId) {
+    public void removeComment(long commentId) {
         Optional<Comment> comment = commentRepository.findById(commentId);
         comment.ifPresent(commentRepository::delete);
-        return comment;
     }
 }

@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
-    <title>List of all persons</title>
+    <title>List of all books</title>
     <style type="text/css">
         body {
             padding: 50px;
@@ -12,30 +12,37 @@
             border: 1px solid lightgray;
             padding: 5px;
         }
+
     </style>
 </head>
 <body>
-<h1>Books:</h1>
+    <h1>Books:</h1>
 
-<table class="books">
-    <thead>
-    <tr>
-        <th>ID</th>
-        <th>Name</th>
-        <th>Action</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="book : ${books}">
-        <td th:text="${book.id}">1</td>
-        <td th:text="${book.name}">Book name</td>
-        <td th:text="${book.author.name}">Author name</td>
-        <td th:text="${book.genre.name}">Genre name</td>
-        <td>
-            <a th:href="@{/edit(id=${book.id})}" href="edit.html">Edit</a>
-        </td>
-    </tr>
-    </tbody>
-</table>
+    <table class="books">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Author</th>
+            <th>Genre</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="book : ${books}">
+            <td th:text="${book.id}">1</td>
+            <td th:text="${book.name}">Book name</td>
+            <td th:text="${book.author.name}">Author name</td>
+            <td th:text="${book.genre.name}">Genre name</td>
+            <td>
+                <a th:href="@{/edit(id=${book.id})}">Edit</a>
+                <a th:href="@{/comment-list(bookId=${book.id})}">Comments</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <a th:href="@{/edit}">
+        <button type="submit">Add new book</button>
+    </a>
 </body>
 </html>

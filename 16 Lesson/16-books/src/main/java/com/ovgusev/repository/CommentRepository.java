@@ -8,5 +8,8 @@ import java.util.List;
 
 public interface CommentRepository extends JpaRepository<Comment, Long> {
     @EntityGraph(value = "Comment.book")
+    List<Comment> findByBookId(long bookId);
+
+    @EntityGraph(value = "Comment.book")
     List<Comment> findByBookName(String bookName);
 }

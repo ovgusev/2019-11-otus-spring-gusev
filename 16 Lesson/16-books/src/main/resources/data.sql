@@ -32,3 +32,4 @@ from  (select 'The Hobbit' name, 'J.R.R. Tolkien' author_name, 'Action and Adven
        select 'Hamlet' name, 'William Shakespeare' author_name, 'Drama' genre_name
        from dual
       );
+insert into comments(id, book_id, text, insert_date) values (1,1,'Test comment', sysdate);
