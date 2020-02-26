@@ -16,11 +16,11 @@ import org.springframework.web.servlet.view.RedirectView;
 @Controller
 @RequiredArgsConstructor
 public class BookController {
-    public static final String BOOK_LIST_URL = "/";
-    public static final String BOOK_EDIT_URL = "/edit";
-    public static final String COMMENT_LIST_URL = "/comment-list";
-    public static final String COMMENT_ADD_URL = "/comment-add";
-    public static final String COMMENT_DELETE_URL = "/comment-delete";
+    static final String BOOK_LIST_URL = "/";
+    static final String BOOK_EDIT_URL = "/edit";
+    static final String COMMENT_LIST_URL = "/comment-list";
+    static final String COMMENT_ADD_URL = "/comment-add";
+    static final String COMMENT_DELETE_URL = "/comment-delete";
 
     private final BookService bookService;
 
@@ -45,8 +45,8 @@ public class BookController {
     }
 
     @PostMapping(value = BOOK_EDIT_URL, params = {"method=save"})
-    public RedirectView bookSave(@RequestParam("id") long id, @RequestParam("name") String bookName, @RequestParam("author") String authorName, @RequestParam(value = "genre") String genreName) {
-        bookService.edit(id, bookName, authorName, genreName);
+    public RedirectView bookSave(Book book) {
+        bookService.edit(book.getId(), book.getName(), book.getAuthor().getName(), book.getGenre().getName());
         return new RedirectView(BOOK_LIST_URL);
     }
 
@@ -58,7 +58,7 @@ public class BookController {
 
     @GetMapping(value = COMMENT_LIST_URL)
     public String commentList(@RequestParam("bookId") long bookId, Model model) {
-        model.addAttribute("bookId", bookId);
+        model.addAttribute("bookId", Long.toString(bookId));
         model.addAttribute("comments", bookService.getCommentList(bookId));
         return "comment-list";
     }

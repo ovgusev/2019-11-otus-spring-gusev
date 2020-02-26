@@ -32,7 +32,7 @@
                 <td th:text="${comment.insertDate}">Insert date</td>
                 <td>
                     <form method="post" th:action="@{/comment-delete(commentId=${comment.id}, bookId=${bookId})}">
-                        <input type="submit" name="Delete"/>
+                        <input type="submit" name="Delete" value="Delete"/>
                     </form>
                 </td>
             </tr>
