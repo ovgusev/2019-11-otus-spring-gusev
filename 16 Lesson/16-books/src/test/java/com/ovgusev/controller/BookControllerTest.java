@@ -4,6 +4,7 @@ import com.ovgusev.domain.Author;
 import com.ovgusev.domain.Book;
 import com.ovgusev.domain.Genre;
 import com.ovgusev.service.BookService;
+import com.ovgusev.service.CommentService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,8 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.List;
 
-import static com.ovgusev.controller.BookController.*;
+import static com.ovgusev.controller.BookController.BOOK_EDIT_URL;
+import static com.ovgusev.controller.BookController.BOOK_LIST_URL;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
@@ -26,7 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest
 @DisplayName("Testing methods of class BookController")
 class BookControllerTest {
-    private final Book TEST_BOOK = new Book()
+    static final Book TEST_BOOK = new Book()
             .setId(1L)
             .setName("book_name")
             .setAuthor(Author.of("author_name"))
@@ -37,6 +39,9 @@ class BookControllerTest {
 
     @MockBean
     private BookService bookService;
+
+    @MockBean
+    private CommentService commentService;
 
     @Test
     void bookList() throws Exception {
@@ -114,57 +119,5 @@ class BookControllerTest {
         assertEquals(0, modelAndView.getModel().size());
 
         verify(bookService, times(1)).remove(TEST_BOOK.getId());
-    }
-
-    @Test
-    void commentList() throws Exception {
-        ModelAndView modelAndView = mvc.perform(get(COMMENT_LIST_URL)
-                .param("bookId", Long.toString(TEST_BOOK.getId())))
-                .andExpect(status().isOk())
-                .andReturn()
-                .getModelAndView();
-
-        assertEquals("comment-list", modelAndView.getViewName());
-        assertEquals(2, modelAndView.getModel().size());
-        assertEquals(Long.toString(TEST_BOOK.getId()), modelAndView.getModel().get("bookId"));
-        assertTrue(((List) modelAndView.getModel().get("comments")).isEmpty());
-
-        verify(bookService, times(1)).getCommentList(TEST_BOOK.getId());
-    }
-
-    @Test
-    void commentAdd() throws Exception {
-        String COMMENT_TEXT = "comment_text";
-
-        ModelAndView modelAndView = mvc.perform(post(COMMENT_ADD_URL)
-                .param("bookId", Long.toString(TEST_BOOK.getId()))
-                .param("text", COMMENT_TEXT))
-                .andExpect(status().isFound())
-                .andReturn()
-                .getModelAndView();
-
-        assertEquals(COMMENT_LIST_URL, ((RedirectView) modelAndView.getView()).getUrl());
-        assertEquals(1, modelAndView.getModel().size());
-        assertEquals(Long.toString(TEST_BOOK.getId()), modelAndView.getModel().get("bookId"));
-
-        verify(bookService, times(1)).addComment(TEST_BOOK.getId(), COMMENT_TEXT);
-    }
-
-    @Test
-    void commentDelete() throws Exception {
-        long COMMENT_ID = 1L;
-
-        ModelAndView modelAndView = mvc.perform(post(COMMENT_DELETE_URL)
-                .param("bookId", Long.toString(TEST_BOOK.getId()))
-                .param("commentId", Long.toString(COMMENT_ID)))
-                .andExpect(status().isFound())
-                .andReturn()
-                .getModelAndView();
-
-        assertEquals(COMMENT_LIST_URL, ((RedirectView) modelAndView.getView()).getUrl());
-        assertEquals(1, modelAndView.getModel().size());
-        assertEquals(Long.toString(TEST_BOOK.getId()), modelAndView.getModel().get("bookId"));
-
-        verify(bookService, times(1)).removeComment(COMMENT_ID);
     }
 }
