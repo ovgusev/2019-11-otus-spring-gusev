@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Edit book</title>
+    <style type="text/css">
+        body {
+            padding: 50px;
+        }
+
+        label {
+            display: inline-block;
+            width: 100px;
+        }
+
+        input:read-only {
+            background: lightgray;
+        }
+
+        .row {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <form th:action="@{/edit(id=${book.id})}" method="post">
+        <h1>Book Info:</h1>
+
+        <div class="row">
+            <label for="id-input">ID:</label>
+            <input id="id-input" type="text" readonly="readonly" th:value="${book.id}" value="1"/>
+        </div>
+
+        <div class="row">
+            <label for="holder-input">Name:</label>
+            <input id="holder-input" name="name" type="text" th:value="${book.name}" value="Book name"/>
+        </div>
+
+        <div class="row">
+            <label for="author-holder-input">Author:</label>
+            <input id="author-holder-input" name="author.name" type="text" th:value="${book.author.name}" value="Author name"/>
+        </div>
+
+        <div class="row">
+            <label for="genre-holder-input">Genre:</label>
+            <input id="genre-holder-input" name="genre.name" type="text" th:value="${book.genre.name}" value="Genre name"/>
+        </div>
+
+        <div class="row">
+            <button type="submit" name="method" th:value="save">Save</button>
+            <button type="submit" name="method" th:value="delete" th:if="${book.id > 0}">Delete</button>
+        </div>
+    </form>
+</body>
+</html>
