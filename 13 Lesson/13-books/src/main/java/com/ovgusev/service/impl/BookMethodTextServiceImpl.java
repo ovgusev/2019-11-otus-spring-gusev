@@ -56,7 +56,7 @@ public class BookMethodTextServiceImpl implements BookMethodTextService {
     }
 
     @Override
-    public String removeCommentText(long commentId, Optional<Comment> comment) {
+    public String removeCommentText(String commentId, Optional<Comment> comment) {
         return comment
                 .map(c -> "Removed comment " + c.toString())
                 .orElseGet(() -> "Comment " + commentId + " not found");

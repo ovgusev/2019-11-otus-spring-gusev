@@ -1,8 +1,10 @@
 package com.ovgusev.repository;
 
-public interface CommentRepository {
-    /*extends
-} JpaRepository<Comment, Long> {
-    @EntityGraph(value = "Comment.book")
-    List<Comment> findByBookName(String bookName);*/
+import com.ovgusev.domain.Comment;
+import org.springframework.data.repository.CrudRepository;
+
+import java.util.List;
+
+public interface CommentRepository extends CrudRepository<Comment, String> {
+    List<Comment> findByBookId(String bookId);
 }

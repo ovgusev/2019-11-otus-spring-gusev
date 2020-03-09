@@ -18,5 +18,5 @@ public interface BookService {
 
     Optional<Map.Entry<Book, Comment>> addComment(String bookName, String commentText);
 
-    Optional<Comment> removeComment(long commentId);
+    Optional<Comment> removeComment(String commentId);
 }

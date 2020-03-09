@@ -18,5 +18,5 @@ public interface BookMethodTextService {
 
     String addCommentText(String bookName, Optional<Map.Entry<Book, Comment>> bookCommentEntry);
 
-    String removeCommentText(long commentId, Optional<Comment> comment);
+    String removeCommentText(String commentId, Optional<Comment> comment);
 }

@@ -1,16 +1,14 @@
 spring:
-  datasource:
-    url: jdbc:h2:mem:testdb
-    initialization-mode: always
-    schema: schema.sql
-    data: test-data.sql
+  data:
+    mongodb:
+      uri: mongodb://localhost
+      database: books-db
+      port: 0
 
-  jpa:
-    generate-ddl: false
-    show-sql: true
-    hibernate:
-      ddl-auto: none
+  shell:
+    interactive:
+      enabled: false
 
 logging:
   level:
-    ROOT: WARN
+    ROOT: DEBUG

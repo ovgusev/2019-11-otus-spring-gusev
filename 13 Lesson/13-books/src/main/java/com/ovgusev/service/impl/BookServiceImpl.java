@@ -3,24 +3,26 @@ package com.ovgusev.service.impl;
 import com.ovgusev.domain.Book;
 import com.ovgusev.domain.Comment;
 import com.ovgusev.repository.BookRepository;
+import com.ovgusev.repository.CommentRepository;
 import com.ovgusev.service.BookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
-//@Transactional
+@Transactional
 @RequiredArgsConstructor
 public class BookServiceImpl implements BookService {
     private final BookRepository bookRepository;
-//    private final CommentRepository commentRepository;
+    private final CommentRepository commentRepository;
 
     @Override
     public List<Book> getBookList() {
-        return bookRepository.findAll();
+        List<Book> books = new ArrayList<>();
+        bookRepository.findAll().forEach(books::add);
+        return books;
     }
 
     @Override
@@ -40,26 +42,25 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<Comment> getCommentList(String bookName) {
-        return null;
-//        commentRepository.findByBookName(bookName);
+        return bookRepository.findByName(bookName)
+                .map(book -> commentRepository.findByBookId(book.getId()))
+                .orElse(new ArrayList<>());
     }
 
     @Override
     public Optional<Map.Entry<Book, Comment>> addComment(String bookName, String commentText) {
-        return null;
-/*        return bookRepository.findByName(bookName)
+        return bookRepository.findByName(bookName)
                 .map(book -> {
                     Comment comment = Comment.of(book, commentText);
                     commentRepository.save(comment);
                     return new AbstractMap.SimpleImmutableEntry<>(book, comment);
-                });*/
+                });
     }
 
     @Override
-    public Optional<Comment> removeComment(long commentId) {
-        return null;
-/*        Optional<Comment> comment = commentRepository.findById(commentId);
+    public Optional<Comment> removeComment(String commentId) {
+        Optional<Comment> comment = commentRepository.findById(commentId);
         comment.ifPresent(commentRepository::delete);
-        return comment;*/
+        return comment;
     }
 }

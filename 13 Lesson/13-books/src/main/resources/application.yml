@@ -1,5 +1,10 @@
 spring:
   data:
     mongodb:
+      uri: mongodb://localhost
       database: books-db
-      port: 40123
+      port: 27017
+
+  shell:
+    interactive:
+      enabled: true

@@ -39,7 +39,7 @@ public class BookCommands {
     }
 
     @ShellMethod(value = "Remove comment", key = {"comment-remove", "cr"})
-    public String removeComment(@ShellOption("commentId") long commentId) {
+    public String removeComment(@ShellOption("commentId") String commentId) {
         return bookMethodTextService.removeCommentText(commentId, bookService.removeComment(commentId));
     }
 }
