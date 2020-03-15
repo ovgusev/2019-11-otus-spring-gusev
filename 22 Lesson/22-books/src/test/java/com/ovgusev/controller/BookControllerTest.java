@@ -7,6 +7,8 @@ import com.ovgusev.service.BookService;
 import com.ovgusev.service.CommentService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -15,19 +17,21 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
+import java.net.InetAddress;
 import java.util.List;
 
 import static com.ovgusev.controller.BookController.BOOK_EDIT_URL;
 import static com.ovgusev.controller.BookController.BOOK_LIST_URL;
+import static com.ovgusev.security.SecurityConfig.LOGIN_URL;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest
-@WithMockUser("mockUser")
 @DisplayName("Testing methods of class BookController")
 class BookControllerTest {
     static final Book TEST_BOOK = new Book()
@@ -45,6 +49,15 @@ class BookControllerTest {
     @MockBean
     private CommentService commentService;
 
+    @ParameterizedTest
+    @ValueSource(strings = {BOOK_LIST_URL, BOOK_EDIT_URL})
+    void unathorized(String url) throws Exception {
+        mvc.perform(get(url))
+                .andExpect(status().isFound())
+                .andExpect(redirectedUrl("http://" + InetAddress.getLoopbackAddress().getCanonicalHostName() + LOGIN_URL));
+    }
+
+    @WithMockUser("mockUser")
     @Test
     void bookList() throws Exception {
         ModelAndView modelAndView = mvc.perform(get(BOOK_LIST_URL))
@@ -59,6 +72,7 @@ class BookControllerTest {
         verify(bookService, times(1)).getBookList();
     }
 
+    @WithMockUser("mockUser")
     @Test
     void bookAdd() throws Exception {
         ModelAndView modelAndView = mvc.perform(get(BOOK_EDIT_URL))
@@ -73,6 +87,7 @@ class BookControllerTest {
         verify(bookService, never()).findById(0L);
     }
 
+    @WithMockUser("mockUser")
     @Test
     void bookEdit() throws Exception {
         when(bookService.findById(TEST_BOOK.getId())).thenReturn(TEST_BOOK);
@@ -90,6 +105,7 @@ class BookControllerTest {
         verify(bookService, times(1)).findById(TEST_BOOK.getId());
     }
 
+    @WithMockUser("mockUser")
     @Test
     void bookSave() throws Exception {
         ModelAndView modelAndView = mvc.perform(post(BOOK_EDIT_URL)
@@ -108,6 +124,7 @@ class BookControllerTest {
         verify(bookService, times(1)).edit(TEST_BOOK.getId(), TEST_BOOK.getName(), TEST_BOOK.getAuthor().getName(), TEST_BOOK.getGenre().getName());
     }
 
+    @WithMockUser("mockUser")
     @Test
     void bookDelete() throws Exception {
         ModelAndView modelAndView = mvc.perform(post(BOOK_EDIT_URL)

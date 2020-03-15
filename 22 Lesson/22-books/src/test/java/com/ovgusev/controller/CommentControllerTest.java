@@ -4,6 +4,8 @@ import com.ovgusev.service.BookService;
 import com.ovgusev.service.CommentService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -12,20 +14,22 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
+import java.net.InetAddress;
 import java.util.List;
 
 import static com.ovgusev.controller.BookControllerTest.TEST_BOOK;
 import static com.ovgusev.controller.CommentController.*;
+import static com.ovgusev.security.SecurityConfig.LOGIN_URL;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest
-@WithMockUser("mockUser")
 @DisplayName("Testing methods of class CommentController")
 class CommentControllerTest {
     @Autowired
@@ -37,6 +41,15 @@ class CommentControllerTest {
     @MockBean
     private CommentService commentService;
 
+    @ParameterizedTest
+    @ValueSource(strings = {COMMENT_LIST_URL, COMMENT_ADD_URL, COMMENT_DELETE_URL})
+    void unathorized(String url) throws Exception {
+        mvc.perform(get(url))
+                .andExpect(status().isFound())
+                .andExpect(redirectedUrl("http://" + InetAddress.getLoopbackAddress().getCanonicalHostName() + LOGIN_URL));
+    }
+
+    @WithMockUser("mockUser")
     @Test
     void commentList() throws Exception {
         ModelAndView modelAndView = mvc.perform(get(COMMENT_LIST_URL)
@@ -53,6 +66,7 @@ class CommentControllerTest {
         verify(commentService, times(1)).getCommentList(TEST_BOOK.getId());
     }
 
+    @WithMockUser("mockUser")
     @Test
     void commentAdd() throws Exception {
         String COMMENT_TEXT = "comment_text";
@@ -71,6 +85,7 @@ class CommentControllerTest {
         verify(commentService, times(1)).addComment(TEST_BOOK.getId(), COMMENT_TEXT);
     }
 
+    @WithMockUser("mockUser")
     @Test
     void commentDelete() throws Exception {
         long COMMENT_ID = 1L;

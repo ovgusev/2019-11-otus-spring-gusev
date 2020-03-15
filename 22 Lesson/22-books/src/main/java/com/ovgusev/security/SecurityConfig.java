@@ -9,13 +9,15 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+    public static final String LOGIN_URL = "/login";
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
                 .authorizeRequests()
                 .anyRequest().authenticated()
-                .and().formLogin()
+                .and().formLogin().loginPage(LOGIN_URL)
                 .and().logout().logoutUrl("/logout");
     }
 
