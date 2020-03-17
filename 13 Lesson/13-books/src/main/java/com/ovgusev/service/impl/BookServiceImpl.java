@@ -9,7 +9,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -48,12 +50,11 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Optional<Map.Entry<Book, Comment>> addComment(String bookName, String commentText) {
+    public Optional<Comment> addComment(String bookName, String commentText) {
         return bookRepository.findByName(bookName)
                 .map(book -> {
                     Comment comment = Comment.of(book, commentText);
-                    commentRepository.save(comment);
-                    return new AbstractMap.SimpleImmutableEntry<>(book, comment);
+                    return commentRepository.save(comment);
                 });
     }
 

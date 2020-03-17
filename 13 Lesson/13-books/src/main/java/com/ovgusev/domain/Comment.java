@@ -7,6 +7,7 @@ import lombok.experimental.Accessors;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -21,10 +22,13 @@ public class Comment {
     private String id;
 
     @DBRef
+    @Field("book")
     private Book book;
 
+    @Field("text")
     private String text;
 
+    @Field("insertDate")
     private LocalDateTime insertDate;
 
     public static Comment of(Book book, String text) {
