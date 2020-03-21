@@ -3,7 +3,7 @@ spring:
     mongodb:
       uri: mongodb://localhost
       database: books-db
-      port: 27017
+      port: 0
 
   shell:
     interactive:

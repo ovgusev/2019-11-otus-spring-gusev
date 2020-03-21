@@ -49,9 +49,9 @@ public class BookMethodTextServiceImpl implements BookMethodTextService {
     }
 
     @Override
-    public String addCommentText(String bookName, Optional<Map.Entry<Book, Comment>> bookCommentEntry) {
+    public String addCommentText(String bookName, Optional<Comment> bookCommentEntry) {
         return bookCommentEntry
-                .map(e -> "Added comment for book " + getShortInfo(e.getKey()) + CRLF + e.getValue().getText())
+                .map(e -> "Added comment for book " + getShortInfo(e.getBook()) + CRLF + e.getText())
                 .orElseGet(() -> bookNotFoundText(bookName));
     }
 

@@ -4,7 +4,6 @@ import com.ovgusev.domain.Book;
 import com.ovgusev.domain.Comment;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 public interface BookMethodTextService {
@@ -16,7 +15,7 @@ public interface BookMethodTextService {
 
     String getCommentListText(List<Comment> commentList);
 
-    String addCommentText(String bookName, Optional<Map.Entry<Book, Comment>> bookCommentEntry);
+    String addCommentText(String bookName, Optional<Comment> bookCommentEntry);
 
     String removeCommentText(String commentId, Optional<Comment> comment);
 }
