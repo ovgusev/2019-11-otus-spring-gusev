@@ -1,0 +1,14 @@
+spring:
+  data:
+    mongodb:
+      uri: mongodb://localhost
+      database: books-db
+      port: 0
+
+  shell:
+    interactive:
+      enabled: false
+
+logging:
+  level:
+    ROOT: DEBUG
