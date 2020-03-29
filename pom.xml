@@ -22,5 +22,6 @@
         <module>16 Lesson/16-books</module>
         <module>22 Lesson/22-books</module>
         <module>25 Lesson/25-migration</module>
+        <module>28 Lesson/28-integration</module>
     </modules>
 </project>
