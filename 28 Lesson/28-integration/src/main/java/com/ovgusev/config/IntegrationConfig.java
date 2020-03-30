@@ -25,7 +25,7 @@ public class IntegrationConfig {
     private static final Duration POLLING_DURATION = Duration.ofMillis(10L);
 
     @Bean
-    public IntegrationFlow integrationFlow(EntityManagerFactory entityManagerFactory, TickerInfoService tickerInfoService, TickerInfoAggregationService tickerInfoAggregationService) {
+    public IntegrationFlow integrationFlow(EntityManagerFactory entityManagerFactory, TickerInfoService tickerInfoService) {
         return IntegrationFlows
                 // часто опрашиваем источник - сервис
                 .from(tickerInfoService::getTickerList,
@@ -40,7 +40,7 @@ public class IntegrationConfig {
                 .aggregate(aggregatorSpec -> aggregatorSpec
                         .correlationStrategy(message -> 1)
                         .expireGroupsUponCompletion(true)
-                        .releaseStrategy(new TimeoutCountSequenceSizeReleaseStrategy(TimeoutCountSequenceSizeReleaseStrategy.DEFAULT_THRESHOLD, tickerInfoAggregationService.AGGREGATE_DURATION.toMillis()))
+                        .releaseStrategy(new TimeoutCountSequenceSizeReleaseStrategy(TimeoutCountSequenceSizeReleaseStrategy.DEFAULT_THRESHOLD, TickerInfoAggregationService.AGGREGATE_DURATION.toMillis()))
                         .messageStore(new SimpleMessageStore(5000))
                 )
                 // разворачиваем листы в отдельные сообщения
@@ -48,7 +48,7 @@ public class IntegrationConfig {
                         .flatMap(Collection::stream)
                         .collect(Collectors.toList()))
                 // агрегируем множество записей. Тикер - группируем, цену - усредняем, дата - максимальная
-                .transform(source -> tickerInfoAggregationService.aggregateTickerInfo((List<TickerInfo>) source))
+                .transform(source -> TickerInfoAggregationService.aggregateTickerInfo((List<TickerInfo>) source))
                 // Персистим
                 .handle(Jpa.outboundAdapter(entityManagerFactory)
                                 .entityClass(AgregatedTickerInfo.class)
