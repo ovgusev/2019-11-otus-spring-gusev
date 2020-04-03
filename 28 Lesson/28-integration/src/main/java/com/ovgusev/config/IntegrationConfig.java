@@ -4,6 +4,7 @@ import com.ovgusev.domain.TickerInfo;
 import com.ovgusev.entity.AgregatedTickerInfo;
 import com.ovgusev.service.TickerInfoAggregationService;
 import com.ovgusev.service.TickerInfoService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.integration.aggregator.TimeoutCountSequenceSizeReleaseStrategy;
@@ -21,8 +22,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Configuration
+@RequiredArgsConstructor
 public class IntegrationConfig {
     private static final Duration POLLING_DURATION = Duration.ofMillis(10L);
+    private final TickerInfoAggregationService tickerInfoAggregationService;
 
     @Bean
     public IntegrationFlow integrationFlow(EntityManagerFactory entityManagerFactory, TickerInfoService tickerInfoService) {
@@ -48,7 +51,7 @@ public class IntegrationConfig {
                         .flatMap(Collection::stream)
                         .collect(Collectors.toList()))
                 // агрегируем множество записей. Тикер - группируем, цену - усредняем, дата - максимальная
-                .transform(source -> TickerInfoAggregationService.aggregateTickerInfo((List<TickerInfo>) source))
+                .transform(source -> tickerInfoAggregationService.aggregateTickerInfo((List<TickerInfo>) source))
                 // Персистим
                 .handle(Jpa.outboundAdapter(entityManagerFactory)
                                 .entityClass(AgregatedTickerInfo.class)

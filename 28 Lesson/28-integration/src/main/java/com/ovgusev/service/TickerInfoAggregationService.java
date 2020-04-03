@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 public class TickerInfoAggregationService {
     public static final Duration AGGREGATE_DURATION = Duration.ofMillis(1000L);
 
-    public static List<AgregatedTickerInfo> aggregateTickerInfo(List<TickerInfo> tickerInfoList) {
+    public List<AgregatedTickerInfo> aggregateTickerInfo(List<TickerInfo> tickerInfoList) {
         List<AgregatedTickerInfo> result = new ArrayList<>();
 
         Map<String, List<TickerInfo>> mapByTicker = tickerInfoList.stream()
