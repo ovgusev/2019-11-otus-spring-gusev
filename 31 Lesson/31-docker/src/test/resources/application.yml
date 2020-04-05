@@ -1,0 +1,16 @@
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    initialization-mode: always
+    schema: schema.sql
+    data: test-data.sql
+
+  jpa:
+    generate-ddl: false
+    show-sql: true
+    hibernate:
+      ddl-auto: none
+
+logging:
+  level:
+    ROOT: WARN
