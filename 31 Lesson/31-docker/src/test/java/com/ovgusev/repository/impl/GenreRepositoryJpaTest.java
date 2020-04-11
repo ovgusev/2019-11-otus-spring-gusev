@@ -1,6 +1,6 @@
 package com.ovgusev.repository.impl;
 
-import com.ovgusev.AbstractRepositoryIntegrationTest;
+import com.ovgusev.repository.AbstractRepositoryIntegrationTest;
 import com.ovgusev.domain.Genre;
 import com.ovgusev.repository.GenreRepository;
 import org.junit.jupiter.api.DisplayName;

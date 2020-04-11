@@ -1,6 +1,9 @@
 spring:
   datasource:
-    driver-class-name: org.postgresql.Driver
+    driver-class-name: ${DB_DRIVER}
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
     initialization-mode: always
     schema: schema.sql
     data: test-data.sql

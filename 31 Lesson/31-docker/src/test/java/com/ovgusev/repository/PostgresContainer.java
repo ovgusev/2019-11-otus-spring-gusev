@@ -1,4 +1,4 @@
-package com.ovgusev;
+package com.ovgusev.repository;
 
 import org.testcontainers.containers.PostgreSQLContainer;
 
@@ -20,6 +20,7 @@ public class PostgresContainer extends PostgreSQLContainer<PostgresContainer> {
     @Override
     public void start() {
         super.start();
+        System.setProperty("DB_DRIVER", container.getDriverClassName());
         System.setProperty("DB_URL", container.getJdbcUrl());
         System.setProperty("DB_USERNAME", container.getUsername());
         System.setProperty("DB_PASSWORD", container.getPassword());

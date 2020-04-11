@@ -1,6 +1,6 @@
 package com.ovgusev.repository.impl;
 
-import com.ovgusev.AbstractRepositoryIntegrationTest;
+import com.ovgusev.repository.AbstractRepositoryIntegrationTest;
 import com.ovgusev.domain.Book;
 import com.ovgusev.repository.BookRepository;
 import org.junit.jupiter.api.BeforeEach;

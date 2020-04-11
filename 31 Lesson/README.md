@@ -12,3 +12,7 @@
 3. Настроить связь между контейнерами, с помощью docker-compose
 4. Опционально: сделать это в локальном кубе.
 5. Приложение желательно реализовать с помощью всех Best Practices Docker (логгирование в stdout и т.д.)
+
+## Commands to run app:
+`mvn -f pom.xml clean package`
+`docker-compose up`
