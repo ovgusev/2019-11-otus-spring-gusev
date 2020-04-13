@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>List of all book comments</title>
+    <style type="text/css">
+        body {
+            padding: 50px;
+        }
+
+        .comments, .comments td {
+            border: 1px solid lightgray;
+            padding: 5px;
+        }
+
+    </style>
+</head>
+<body>
+    <h1>Comments:</h1>
+        <table class="comments">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Comment</th>
+                <th>Insert Date</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="comment : ${comments}">
+                <td th:text="${comment.id}">1</td>
+                <td th:text="${comment.text}">Comment text</td>
+                <td th:text="${comment.insertDate}">Insert date</td>
+                <td>
+                    <form method="post" th:action="@{/comment-delete(commentId=${comment.id}, bookId=${bookId})}">
+                        <input type="submit" name="Delete" value="Delete"/>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    <form method="post" th:action="@{/comment-add(bookId=${bookId})}">
+        <input type="text" name="text">
+        <button type="submit">Add</button>
+    </form>
+    <a href="/">Return to book list</a>
+</body>
+</html>

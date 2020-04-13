@@ -1,0 +1,19 @@
+spring:
+  datasource:
+    driver-class-name: ${DB_DRIVER}
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    initialization-mode: always
+    schema: classpath:schema.sql
+    data: classpath:data.sql
+
+  jpa:
+    generate-ddl: false
+    show-sql: true
+    hibernate:
+      ddl-auto: none
+
+logging:
+  level:
+    ROOT: INFO
